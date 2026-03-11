@@ -17,19 +17,24 @@ try:
     model = joblib.load("trash_classifier_model.pkl")
     label_encoder = joblib.load("label_encoder.pkl")
     feature_columns = joblib.load("model_features.pkl")
-except:
+except Exception as e:
     st.error("Model files not found. Please upload the .pkl files.")
     st.stop()
 
 # -----------------------------
-# Function to safely load images
+# Safe image loader
 # -----------------------------
 def show_image(path, caption=None, width=None):
 
     if os.path.exists(path):
-        st.image(path, caption=caption, width=width)
+
+        if width is not None:
+            st.image(path, caption=caption, width=width)
+        else:
+            st.image(path, caption=caption, use_container_width=True)
+
     else:
-        st.info(f"Image not found: {path}")
+        st.warning(f"Image not found: {path}")
 
 # -----------------------------
 # Banner Image
