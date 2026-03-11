@@ -28,6 +28,11 @@ y = data[target]
 X = pd.get_dummies(X)
 
 # -----------------------------
+# Save feature columns
+# -----------------------------
+feature_columns = X.columns.tolist()
+
+# -----------------------------
 # Encode labels
 # -----------------------------
 label_encoder = LabelEncoder()
@@ -44,11 +49,11 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # -----------------------------
-# Train model (smaller size)
+# Train model
 # -----------------------------
 model = RandomForestClassifier(
-    n_estimators=50,     # fewer trees = smaller model
-    max_depth=10,        # limits tree size
+    n_estimators=50,
+    max_depth=10,
     random_state=42
 )
 
@@ -64,12 +69,12 @@ accuracy = accuracy_score(y_test, y_pred)
 print("Model Accuracy:", accuracy)
 
 # -----------------------------
-# Save model (compressed)
+# Save files
 # -----------------------------
 joblib.dump(model, "trash_classifier_model.pkl", compress=3)
-
-# Save label encoder
 joblib.dump(label_encoder, "label_encoder.pkl")
+joblib.dump(feature_columns, "model_features.pkl")
 
 print("Model saved as trash_classifier_model.pkl")
 print("Label encoder saved as label_encoder.pkl")
+print("Feature columns saved as model_features.pkl")
