@@ -1,0 +1,58 @@
+# Python cache
+
+**pycache**/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+
+venv/
+env/
+ENV/
+.venv/
+
+# Environment variables
+
+.env
+
+# Python distribution files
+
+build/
+dist/
+*.egg-info/
+
+# Jupyter Notebook checkpoints
+
+.ipynb_checkpoints
+
+# IDE / Editor folders
+
+.vscode/
+.idea/
+
+# Mac OS files
+
+.DS_Store
+
+# Windows files
+
+Thumbs.db
+
+# Logs
+
+*.log
+
+# Temporary files
+
+*.tmp
+*.temp
+
+# Model training artifacts (optional)
+
+# Uncomment if you don't want to upload trained models
+
+# *.pkl
+
+# Dataset backups
+
+*.bak
