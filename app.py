@@ -1,25 +1,40 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import os
 
 # -----------------------------
-# Load model files
-# -----------------------------
-model = joblib.load("trash_classifier_model.pkl")
-label_encoder = joblib.load("label_encoder.pkl")
-feature_columns = joblib.load("model_features.pkl")
-
-# -----------------------------
-# Page Title
+# Page Config
 # -----------------------------
 st.set_page_config(page_title="Smart Trash Classifier")
 
 st.title("♻️ Smart Trash Classifier")
 
 # -----------------------------
+# Load model files safely
+# -----------------------------
+try:
+    model = joblib.load("trash_classifier_model.pkl")
+    label_encoder = joblib.load("label_encoder.pkl")
+    feature_columns = joblib.load("model_features.pkl")
+except:
+    st.error("Model files not found. Please upload the .pkl files.")
+    st.stop()
+
+# -----------------------------
+# Function to safely load images
+# -----------------------------
+def show_image(path, caption=None, width=None):
+
+    if os.path.exists(path):
+        st.image(path, caption=caption, width=width)
+    else:
+        st.info(f"Image not found: {path}")
+
+# -----------------------------
 # Banner Image
 # -----------------------------
-st.image("images/banner.jpg", use_container_width=True)
+show_image("images/banner.jpg")
 
 st.write("Predict the type of waste and see how it should be sorted.")
 
@@ -31,16 +46,16 @@ st.subheader("Example Waste Types")
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.image("images/plastic.jpg", caption="Plastic")
+    show_image("images/plastic.jpg", "Plastic")
 
 with col2:
-    st.image("images/metal.jpg", caption="Metal")
+    show_image("images/metal.jpg", "Metal")
 
 with col3:
-    st.image("images/cardboard.jpg", caption="Cardboard")
+    show_image("images/cardboard.jpg", "Cardboard")
 
 with col4:
-    st.image("images/organic.jpg", caption="Organic")
+    show_image("images/organic.jpg", "Organic")
 
 st.divider()
 
@@ -78,7 +93,7 @@ if st.button("Predict Waste Type"):
     # Convert categorical features
     input_data = pd.get_dummies(input_data)
 
-    # Align columns with training features
+    # Align with training features
     input_data = input_data.reindex(columns=feature_columns, fill_value=0)
 
     # Predict
@@ -93,10 +108,10 @@ if st.button("Predict Waste Type"):
     # -----------------------------
     image_path = f"images/{predicted_label}.jpg"
 
-    st.image(image_path, caption=f"{predicted_label} Waste", width=350)
+    show_image(image_path, f"{predicted_label} Waste", 350)
 
     # -----------------------------
-    # Show input summary
+    # Input Summary
     # -----------------------------
     st.subheader("Input Summary")
 
